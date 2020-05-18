@@ -1,28 +1,25 @@
 #lang racket
+;
+(require "TDA_198801291_Ramirez.rkt")
+(define null '())
+(define workspace '())
+(define index '())
+(define local-repository '())
+(define remote-repository '())
 
-;---TDA------
+;-----archivos de prueba---
 
-;Workspace
+(define p1 ((archivo)"soy el primer cambio en el archivo" "David Ramirez" "00001"))
 
-;Index
+(define p2 ((archivo)"soy el segundo cambio en el archivo" "Juanito Perez" "00002"))
 
-;Local Repository
-
-;Remote Repository
-
-;Archivo
-
-;Zonas TDA
-(define (zonas)
-  (define workspace null)
-  (define index null)
-  (define local-repository null)
-  (define remote-repository null)
-  (list workspace index local-repository remote-repository)
-)
+(define p3 ((archivo)"soy el tercer cambio en el archivo" "David Ramirez" "00003"))
 
 
 ;-----------comandos-----------
+;pull -> add -> commit -> push -> pull ...
+
+
 ;pull
 (define (pull)
   (lambda (commits)
@@ -34,7 +31,9 @@
 
 (define (add)
   (lambda (archivo1)
+        
         (displayln "Cambios desde Workspace a Index")
+        ;archivo1
     )
 )
   
@@ -43,6 +42,8 @@
   (lambda (comentario)
         (displayln "Cambio realizado: ")
         (displayln comentario)
+        (unir-listas ((zonas)1) (list comentario))
+    
     )
 )
   
@@ -52,13 +53,12 @@
         (displayln "Commits agregado a remote-repository")
     )
 )
-  
 
-;-------------git---------
-
-;pull -> add -> commit -> push
-
+;; Funcion git principal para ejecutar codigos
+;; Dominio: string
+;; Recorrido: funcion
 (define (git comando)
+
     (cond
       ;pull
       [(eq? comando pull)
@@ -76,8 +76,10 @@
       [(eq? comando push)
        (push)]
     )
+    
 )
 
+;---- otras funciones -----
 ;Unir Listas
 (define unir-listas
   (lambda (l1 l2)
