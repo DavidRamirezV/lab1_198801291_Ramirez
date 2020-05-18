@@ -1,11 +1,7 @@
 #lang racket
 ;
 (require "TDA_198801291_Ramirez.rkt")
-(define null '())
-(define workspace '())
-(define index '())
-(define local-repository '())
-(define remote-repository '())
+
 
 ;-----archivos de prueba---
 
@@ -31,20 +27,30 @@
 
 (define (add)
   (lambda (archivo1)
-        
-        (displayln "Cambios desde Workspace a Index")
-        ;archivo1
+       (lambda(zona) 
+        (displayln "Cambios desde Workspace a Index:")        
+        (list (car zona)
+              (unir-listas (car(cdr zona)) (list archivo1))
+              (car (cdr (cdr zona))) 
+              (car(cdr (cdr (cdr zona))))
+         )
+       )
     )
 )
   
 ;commit
 (define (commit)
   (lambda (comentario)
+     (lambda(zona)
         (displayln "Cambio realizado: ")
-        (displayln comentario)
-        (unir-listas ((zonas)1) (list comentario))
-    
-    )
+        (writeln comentario)
+        (list (car zona)
+              (car(cdr zona))
+              (unir-listas (car (cdr (cdr zona))) (list comentario))
+              (car(cdr (cdr (cdr zona))))
+         )
+       )
+   )
 )
   
 ;push
