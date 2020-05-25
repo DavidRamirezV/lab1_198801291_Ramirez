@@ -2,4 +2,6 @@
 # Back up files#
 ###################
 *.bak
-dir_to_ignore/compiled
+*.dep
+*.zo
+*compiled/
