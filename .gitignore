@@ -4,4 +4,4 @@
 *.bak
 *.dep
 *.zo
-compiled/
+**/
