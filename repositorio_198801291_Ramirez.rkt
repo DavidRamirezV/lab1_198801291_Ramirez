@@ -1,6 +1,7 @@
 #lang racket
 ;
 (require "TDA_198801291_Ramirez.rkt")
+(require "Otras-func_198801291_Ramirez.rkt")
 
 
 ;-----archivos de prueba---
@@ -19,7 +20,7 @@
 ;pull
 (define (pull)
   (lambda (commits)
-        (displayln "Commits recibidos desde remote-repository")
+        (displayln "Commits recibidos desde remote-repository al Workspace")
     )
 )
   
@@ -30,7 +31,7 @@
        (lambda(zona) 
         (displayln "Cambios desde Workspace a Index:")        
         (list (car zona)
-              (unir-listas (car(cdr zona)) (list archivo1))
+              (cons (car(cdr zona)) (list archivo1))
               (car (cdr (cdr zona))) 
               (car(cdr (cdr (cdr zona))))
          )
@@ -46,7 +47,7 @@
         (writeln comentario)
         (list (car zona)
               (car(cdr zona))
-              (unir-listas (car (cdr (cdr zona))) (list comentario))
+              (cons (car (cdr (cdr zona))) (list comentario))
               (car(cdr (cdr (cdr zona))))
          )
        )
@@ -84,19 +85,4 @@
        (push)]
     )
     
-)
-
-;---- otras funciones -----
-
-;Unir Listas
-(define unir-listas
-  (lambda (l1 l2)
-      (if (null? l1)
-          l2
-          (if (null? l2)
-              l1
-              (cons (car l1) (unir-listas (cdr l1) l2))                    
-          )
-       )
-  )
 )
