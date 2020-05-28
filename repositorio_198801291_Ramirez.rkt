@@ -6,12 +6,13 @@
 
 ;-----archivos de prueba---
 
-(define p1 ((archivo)"soy el primer cambio en el archivo" "David Ramirez" "00001"))
+(define a1 ((archivo)"soy el primer cambio en el archivo" "David Ramirez" "00001"))
 
-(define p2 ((archivo)"soy el segundo cambio en el archivo" "Juanito Perez" "00002"))
+(define a2 ((archivo)"soy el segundo cambio en el archivo" "Juanito Perez" "00002"))
 
-(define p3 ((archivo)"soy el tercer cambio en el archivo" "David Ramirez" "00003"))
+(define a3 ((archivo)"soy el tercer cambio en el archivo" "David Ramirez" "00003"))
 
+(define z1 ((TDA-zonas)a1 a1 '(("soy" "el" "primer" "cambio" "en" "el" "archivo") '() "David Ramirez" "00001") '() ))
 
 ;-----------comandos-----------
 ;pull -> add -> commit -> push -> pull ...
@@ -31,7 +32,7 @@
        (lambda(zona) 
         (displayln "Cambios desde Workspace a Index:")        
         (list (car zona)
-              (cons (car(cdr zona)) (list archivo1))
+              (unir-listas (car(cdr zona)) (list archivo1))
               (car (cdr (cdr zona))) 
               (car(cdr (cdr (cdr zona))))
          )
@@ -42,18 +43,20 @@
 ;commit
 (define (commit)
   (lambda (comentario)
-     (lambda(zona)
-        (displayln "Cambio realizado: ")
-        (writeln comentario)
+     (lambda(zona)  
         (list (car zona)
-              (car(cdr zona))
-              (cons (car (cdr (cdr zona))) (list comentario))
-              (car(cdr (cdr (cdr zona))))
-         )
+              (car (cdr zona)) 
+         
+        )
        )
    )
 )
-  
+
+(define (cons-local-rep L1 L2 )
+   (unir-listas (comparar (car L1) (car L2))
+                          (cdr L2))          
+)
+
 ;push
 (define (push)
   (lambda (commits)
