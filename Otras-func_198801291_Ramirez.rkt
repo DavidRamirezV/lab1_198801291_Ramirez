@@ -1,5 +1,40 @@
 #lang racket
 
+
+
+;------Funciones para comando add---------
+
+(define (work-to-index L workspace)
+  (if (null? L)
+      workspace
+      (work-to-index-cada-valor L workspace)
+   )  
+ )
+
+
+(define (work-to-index-cada-valor L workspace) 
+   (if (null? L)
+       null
+       
+       (cons (work-to-index-rec (car L) workspace)
+             (work-to-index-cada-valor (cdr L) workspace))
+    )
+)
+
+
+(define (work-to-index-rec string workspace)
+  (if (null? workspace)
+    null
+    (if (eq? string (car(car workspace)))
+        (car workspace)
+        (work-to-index-rec string (cdr workspace))
+     )
+  )
+)
+
+
+;--------Funciones para comando commit------------
+
 ;Dominio: Un string y una lista
 ;Recorrido: Booleano
 ;Descripcion: Funcion que devuelve True si se encuentra el string en la lista, False si no se encuentra
@@ -76,6 +111,13 @@
 )
 
 
+
+
+
+
+(provide work-to-index)
+(provide work-to-index-cada-valor)
+(provide work-to-index-rec)
 (provide comparar)
 (provide buscar)
 (provide encontrar)

@@ -10,22 +10,22 @@
 ;;Funcion constructora de archivos
 ;;Dominio: string , string , entero
 ;;Recorrido: lista que representa el contenido de un archivo
-(define (archivo)
-  (lambda (contenido autor code)
-       (list contenido autor code )
+(define archivo
+  (lambda (nombre-archivo contenido autor)
+       (list nombre-archivo contenido autor)
   )
 )
 
 ;;Funcion constructora de zonas
 ;;Dominio: lista workspace , lista index , lista local-repository, lista remote repository
 ;;Recorrido: lista de zonas
-(define (TDA-zonas)
+(define TDA-zonas
   (lambda(w i l r)
        (list w i l r)
     )
 )
 
-(define zonas ((TDA-zonas)workspace index local-repository remote-repository))
+(define zonas (TDA-zonas workspace index local-repository remote-repository))
 
 
 (provide archivo)
