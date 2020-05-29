@@ -12,10 +12,10 @@
 
 (define a3 ((archivo)"soy el tercer cambio en el archivo" "David Ramirez" "00003"))
 
-(define z1 ((TDA-zonas)a1 a1 '(("soy" "el" "primer" "cambio" "en" "el" "archivo") '() "David Ramirez" "00001") '() ))
+(define z1 ((TDA-zonas)null (list a1 a2) null null))
 
 ;-----------comandos-----------
-;pull -> add -> commit -> push -> pull ...
+;pull -> workspacce -> add -> index -> commit -> local repository -> push -> remote repository -> pull ...
 
 
 ;pull
@@ -31,30 +31,43 @@
   (lambda (archivo1)
        (lambda(zona) 
         (displayln "Cambios desde Workspace a Index:")        
-        (list (car zona)
-              (unir-listas (car(cdr zona)) (list archivo1))
+        ((TDA-zonas) (car zona)
+              (if (null? (car(cdr zona)))
+                  (cons (car(cdr zona)) (list archivo1))
+                  (unir-listas (car(cdr zona)) (list archivo1)))
               (car (cdr (cdr zona))) 
               (car(cdr (cdr (cdr zona))))
          )
        )
     )
 )
-  
+
 ;commit
 (define (commit)
   (lambda (comentario)
      (lambda(zona)  
-        (list (car zona)
-              (car (cdr zona)) 
-         
+        ((TDA-zonas) (car zona)
+              (car (cdr zona))
+              (cons-local-rep (car (reverse (car (cdr zona)))) (car (cdr (reverse (car (cdr zona))))) comentario)
+              (car (cdr (cdr (cdr zona))))
+                 
         )
-       )
+      )
    )
 )
 
-(define (cons-local-rep L1 L2 )
-   (unir-listas (comparar (car L1) (car L2))
-                          (cdr L2))          
+;(((git commit)"se cambio una palabra")  (((git add) a1)zonas))
+;Primero el nuevo, luego el antiguo
+(define (cons-local-rep L1 L2 string)
+  (if (null? L2)
+       (unir-listas (comparar (car L1) " ")
+                          (unir-listas (cdr L1) (list string)))
+       (if (null? L1)
+           (unir-listas (comparar  (car L2) " ")
+                          (unir-listas (cdr L2) (list string)))
+           (unir-listas (comparar (car L1) (car L2))
+                               (unir-listas (cdr L1) (list string))))
+   )
 )
 
 ;push
