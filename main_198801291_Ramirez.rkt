@@ -10,9 +10,13 @@
 
 (define a2 (archivo "archivo1.rkt" "soy el segundo cambio en el archivo" "Juanito Perez" ))
 
-(define a3 (archivo "archivo2.rkt" "soy el tercer cambio en el archivo" "David Ramirez"  ))
+(define a3 (archivo "archivo2.rkt" "soy el segundo archivo, este es mi contenido" "David Ramirez"  ))
 
-(define z1 (TDA-zonas (list a1 a3) null null null))
+(define z1 (TDA-zonas (list a2 a3) null null (list a1)))
+
+
+;(index-to-local (list a1) (car z1) "comentarioo")
+
 
 ;-----------comandos-----------
 ;pull -> workspacce -> add -> index -> commit -> local repository -> push -> remote repository -> pull ...
@@ -27,16 +31,12 @@
 
 ;add
 (define (add)
-  (lambda (archivo1)
+  (lambda (lista)
        (lambda(zona)        
-        ((TDA-zonas) (car zona)
-                     (if (null? (car(cdr zona)))
-                         (cons (car(cdr zona))
-                               (list archivo1))
-                         (unir-listas (car(cdr zona))
-                                      (list archivo1)))
+          (TDA-zonas (car zona)
+                     (remove* '(()) (work-to-index lista (car zona)))
                      (car (cdr (cdr zona))) 
-                     (car(cdr (cdr (cdr zona))))
+                     (car (cdr (cdr (cdr zona))))
          )
        )
     )
@@ -46,11 +46,9 @@
 (define (commit)
   (lambda (comentario)
      (lambda(zona)  
-        ((TDA-zonas) (car zona)
+          (TDA-zonas (car zona)
                      (car (cdr zona))
-                     (cons-local-rep (car (reverse (car (cdr zona))))
-                                     (car (cdr (reverse (car (cdr zona)))))
-                                     comentario)
+                     (index-to-local (car (cdr zona)) (car (cdr (cdr (cdr zona)))) comentario)
                      (car (cdr (cdr (cdr zona))))
                  
         )
@@ -59,22 +57,7 @@
 )
 
 
-;(((git commit)"se cambio una palabra")  (((git add) a1)zonas))
-;Primero el nuevo, luego el antiguo
-(define (cons-local-rep L1 L2 string)
-  (if (null? L2)
-       (unir-listas (comparar (car L1) " ")
-                    (unir-listas (cdr L1)
-                                 (list string)))
-       (if (null? L1)
-           (unir-listas (comparar  (car L2) " ")
-                        (unir-listas (cdr L2)
-                                     (list string)))
-           (unir-listas (comparar (car L1) (car L2))
-                        (unir-listas (cdr L1)
-                                     (list string))))
-   )
-)
+;(((git commit)"se cambio una palabra")  (((git add) (list "archivo1.rkt"))z1))
 
 ;push
 (define (push)
@@ -105,6 +88,9 @@
       ;push
       [(eq? comando push)
        (push)]
+      
+      [else
+       (displayln "Comando Invalido")]
     )
     
 )
