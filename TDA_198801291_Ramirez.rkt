@@ -1,41 +1,41 @@
 #lang racket
 
+;Dominio: -
+;Recorrido: lista vacia
+;Descripcion: Funcion null retorna una lista vacia
 (define null '())
-(define workspace '())
-(define index '())
-(define local-repository '())
-(define remote-repository '())
 
-
-;;Funcion constructora de archivos
-;;Dominio: string , string , entero
-;;Recorrido: lista que representa el contenido de un archivo
+;Dominio: string , string , string
+;Recorrido: lista que representa el contenido de un archivo
+;Descripcion: Funcion constructora de archivos
 (define archivo
   (lambda (nombre-archivo contenido autor)
        (list nombre-archivo contenido autor)
   )
 )
 
-;;Funcion constructora de zonas
-;;Dominio: lista workspace , lista index , lista local-repository, lista remote repository
-;;Recorrido: lista de zonas
+
+;Dominio: lista workspace , lista index , lista local-repository, lista remote repository
+;Recorrido: lista de zonas
+;Descripcion: Funcion constructora de zonas
 (define TDA-zonas
   (lambda(w i l r)
        (list w i l r)
     )
 )
 
-(define zonas (TDA-zonas workspace index local-repository remote-repository))
+
+
+;Dominio: lista workspace , lista index , lista local-repository, lista remote repository
+;Recorrido: lista de zonas
+;Descripcion: Inicio con una lista de zonas vacio
+(define zonas (TDA-zonas null null null null))
 
 
 (provide archivo)
 (provide TDA-zonas)
 (provide zonas)
 (provide null)
-(provide workspace)
-(provide index )
-(provide local-repository)
-(provide remote-repository)
 
 ;-----testing---
 
