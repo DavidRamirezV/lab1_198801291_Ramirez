@@ -10,13 +10,13 @@
 
 (define a2 (archivo "archivo1.rkt" "soy el segundo cambio en el archivo" "Juanito Perez" ))
 
-(define a3 (archivo "archivo2.rkt" "soy el segundo archivo, este es mi contenido" "David Ramirez"  ))
+(define a3 (archivo "archivo2.rkt" "este es el segundo archivo, este es mi contenido" "David Ramirez"  ))
 
-(define z1 (TDA-zonas (list a2 a3) null null (list a1)))
+(define a4 (archivo "archivo2.rkt" "soy el segundo archivo y mi contenido es muy largo, como si fuera un parrafo completo" "David Ramirez"  ))
 
+(define a5 (archivo "archivo3.rkt" "este es el tercer archivo" "Juanito Perez"  ))
 
-;(index-to-local (list a1) (car z1) "comentarioo")
-
+(define z2 (TDA-zonas (list a1 a3) null null null))
 
 ;-----------comandos-----------
 ;pull -> workspacce -> add -> index -> commit -> local repository -> push -> remote repository -> pull ...
@@ -24,7 +24,7 @@
 
 ;pull
 (define (pull)
-  (lambda (commits)
+  (lambda (zona)
         (displayln "Commits recibidos desde remote-repository al Workspace")
     )
 )
@@ -51,19 +51,24 @@
                      (index-to-local (car (cdr zona)) (car (cdr (cdr (cdr zona)))) comentario)
                      (car (cdr (cdr (cdr zona))))
                  
-        )
+          )
       )
    )
 )
 
 
 ;(((git commit)"se cambio una palabra")  (((git add) (list "archivo1.rkt"))z1))
+;(((git commit)"se cambio una palabra")  (((git add) (list "archivo1.rkt"))z2))
+;(((git commit)"se agregaron dos archivos")  (((git add) null)z2))
 
 ;push
 (define (push)
-  (lambda (commits)
-        (displayln "Commits agregado a remote-repository")
-    
+  (lambda (zona)
+       (TDA-zonas (car zona)
+                  (car (cdr zona))
+                  (car (cdr (cdr zona)))
+                  (local-to-remote (car (cdr (cdr zona))) (car (cdr (cdr (cdr zona)))))
+        )    
     )
 )
 
@@ -94,3 +99,28 @@
     )
     
 )
+
+
+
+;(display(zonas->string z2))
+;(display(zonas->string (((git commit)"se cambio una palabra")  (((git add) (list "archivo1.rkt"))z2))))
+(define (zonas->string zonas)
+     (string-append    "------------WORKSPACE-----------\n"
+                     (zona-a-string (car zonas) "w")
+                     "\n--------------INDEX-------------\n"
+                     (zona-a-string (car (cdr zonas)) "i")
+                     "\n---------LOCAL REPOSITORY-------\n"
+                     (zona-a-string (car (cdr (cdr zonas))) "l")
+                     "\n--------REMOTE REPOSITORY-------\n"
+                     (zona-a-string (car (cdr (cdr (cdr zonas)))) "r")
+                     "\n")
+)
+
+
+
+
+(define push1 ((git push)(((git commit)"se cambio una palabra")  (((git add) null)z2))))
+(define push2 ((git push)(((git commit)"editado archivo1.rkt, agregado archivo2.rkt")  (((git add) (list "archivo2.rkt" "archivo3.rkt")) (editar-workspace (list a2 a4 a5) push1)))))
+
+;(display(zonas->string push1))
+;(display(zonas->string push2))

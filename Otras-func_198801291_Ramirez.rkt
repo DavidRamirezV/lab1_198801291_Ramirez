@@ -1,9 +1,13 @@
 #lang racket
 
-
-
+(require "TDA_198801291_Ramirez.rkt")
 ;------Funciones para comando add---------
 
+
+;Dominio:
+;Recorrido;
+;Descripcion;
+;Recursion
 (define (work-to-index L workspace)
   (if (null? L)
       workspace
@@ -11,7 +15,10 @@
    )  
  )
 
-
+;Dominio:
+;Recorrido;
+;Descripcion;
+;Recursion
 (define (work-to-index-cada-valor L workspace) 
    (if (null? L)
        null
@@ -22,6 +29,10 @@
 )
 
 
+;Dominio:
+;Recorrido;
+;Descripcion;
+;Recursion
 (define (work-to-index-rec string workspace)
   (if (null? workspace)
     null
@@ -35,6 +46,11 @@
 
 ;--------Funciones para comando commit------------
 
+
+;Dominio:
+;Recorrido;
+;Descripcion;
+;Recursion
 (define (index-to-local index remote string)
     (if (null? index)
         null
@@ -43,6 +59,11 @@
      )   
 )
 
+
+;Dominio:
+;Recorrido;
+;Descripcion;
+;Recursion
 (define (index-to-local-rec archivo remote string)
     (if (null? remote)
         
@@ -55,6 +76,7 @@
          )
    ) 
  )
+
 
 ;Dominio: Dos listas (primera lista es el archivo viejo y segunda lista es el archivo nuevo)
 ;         y un strings (comentario del commit)
@@ -138,10 +160,129 @@
    )
 )
 
+;-----Funciones para comando push---------
+(define (local-to-remote local remote)
+  (if (null? local)
+      null
+      (cons (local-to-remote-rec (car local) remote)
+            (local-to-remote (cdr local) remote))
+   )  
+)
+
+
+
+(define (local-to-remote-rec commit remote)
+    (if (null? remote)        
+        (archivo-remote commit)
+        (if (eq? (car commit) (car (car remote)))
+            (archivo-remote commit)
+            (local-to-remote-rec commit (cdr remote) )
+            
+            
+         )
+   ) 
+ )
+
+(define (archivo-remote archivo)
+  (unir-listas (list (car archivo))
+               (unir-listas (traducir (car (cdr archivo))
+                                      (car (cdr (cdr (cdr archivo) ))))
+                            (cdr archivo)))
+   
+
+ )
+
+
+(define (traducir L1 L2 )
+  (if (null? L1)
+     (list (string-join L2))
+     (list (string-join (decodificar L1 L2)))
+   )
+  
+)
+
+
+(define (decodificar L1 L2)
+  (if (null? L2)
+      null
+      (if (eq? (car L2) #t)
+          (cons  (car L1)
+                 (decodificar (cdr L1) (cdr L2)))
+          (cons (car L2)
+                (decodificar L1 (cdr L2)))
+          
+       )   
+   )
+ )
+
+
+;-----zonas->string-----
+(define (zona-a-string zona char)
+  (if (null? zona)
+      ""
+      (cond
+          [(or (eq? char "w") (eq? char "i"))
+           (a-string zona)]
+
+          [(eq? char "l")
+           (local-a-string zona)]
+          
+          [(eq? char "r")
+           (remote-a-string zona)]
+        
+       )    
+   )
+)
+
+;(add-\n '("aiuda" "porfavor"))
+;>"aiuda\nporfavor\n"
+(define (add-salto-linea L)
+  (if (null? L)
+     ""
+    (string-append (string-append (car L) "\n")
+           (add-salto-linea (cdr L)))
+    )
+)
+
+(define (a-string zona)
+  (if (null? zona)
+      ""
+     (string-append (string-append (add-salto-linea (car zona)) "\n")
+           (a-string (cdr zona)))
+
+   )  
+ )
+
+
+(define (local-a-string zona)
+  (if (null? zona)
+      ""
+      (string-append (car (cdr(reverse (car zona)))) ": " (car (reverse (car zona))) "\n"
+                     (car (car zona)) "\n"
+                     "Contenido intacto: " (string-join (car (cdr (car zona)))) "\n"
+                     "Contenido eliminado: " (string-join (remove* '(#t) (car (cdr (cdr(car zona)))))) "\n"
+                     "Contenido nuevo: " (string-join (remove* '(#t) (car (cdr (cdr (cdr(car zona))))))) "\n\n"                     
+                     (local-a-string (cdr zona)))
+                     
+   )
+)
+(define (remote-a-string zona)
+  (if (null? zona)
+      ""
+      (string-append (car (car zona)) "\n"
+                     (car (cdr (car zona))) "\n"
+                     "commit: "  (car (reverse (car zona))) "\n"
+                     "realizado por: " (car (cdr(reverse (car zona)))) "\n\n"
+                     (remote-a-string (cdr zona)))
+                     
+   )
+)
+
+;------Otras Funciones-----
 
 ;Dominio: Dos Listas
 ;Recorrido: Retorna una lista que contiene ambas listas unidas
-;Descripcion: Funcion que une dos listas            
+;Descripcion: Funcion que une dos listas         
 ;Recursion natural
 (define unir-listas
   (lambda (L1 L2)
@@ -155,16 +296,24 @@
   )
 )
 
+;Dominio: Lista con archivos y zonas
+;Recorrido: zonas
+;Descripcion: Funcion que edita el contenido de workspace ya que la funcion add añade siempre desde workspace y
+;             se necesita una forma de probar funciones con workspace distintos.
+(define (editar-workspace L zonas)
+  (TDA-zonas L
+             (car (cdr zonas))
+             (car (cdr (cdr zonas))) 
+             (car (cdr (cdr (cdr zonas))))
+   
+   )
+)
 
-
+;----provides-----
 
 (provide index-to-local)
-(provide index-to-local-rec)
-(provide cons-local-rep)
 (provide work-to-index)
-(provide work-to-index-cada-valor)
-(provide work-to-index-rec)
-(provide comparar)
-(provide buscar)
-(provide encontrar)
+(provide local-to-remote)
+(provide zona-a-string)
 (provide unir-listas)
+(provide editar-workspace)
